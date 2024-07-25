@@ -4,7 +4,11 @@
   "description": "1. npm init -y 3. npm install express 4. npm install typescript ts-node @types/express @types/node --save-dev 5. npm install --save-dev ts-node-dev 6. npm install --save-dev nodemon ts-node 7. npm install --save-dev jest @types/jest ts-jest 8. npm install @nestjs/testing --save-dev 9. npx tsc --init",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
   },
   "keywords": [],
   "author": "",
