@@ -1,4 +1,4 @@
 export type TokenModel = {
     userCode: string,
-    token: string
+    key: string
 }

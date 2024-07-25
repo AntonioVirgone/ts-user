@@ -1,5 +1,5 @@
 export type UserEntity = {
     userCode: string,
-    appName: string,
+    app: string,
     role: string,
 }

@@ -1,8 +1,9 @@
+import axios from "axios";
+import { PrismaClient } from "@prisma/client";
 import { TokenModel } from "../../model/TokenModel";
 import { UserModel } from "../../model/UserModel";
 import { UserEntity } from "../entity/UserEntity";
 import { ILoginRepository } from "./ILoginRepository";
-import { PrismaClient } from "@prisma/client";
 
 export class LoginRepository implements ILoginRepository {
   prisma = new PrismaClient();
@@ -24,17 +25,19 @@ export class LoginRepository implements ILoginRepository {
     const userEntity: UserEntity = {
       userCode: user!.userCode,
       role: user!.role,
-      appName: "ts-user",
+      app: "ts-user",
     };
 
     return userEntity;
   }
 
   async generateToken(userEntity: UserEntity): Promise<TokenModel> {
-    console.log("token generated");
+    const response = await axios.post<TokenModel>('http://localhost:3020/', userEntity);
+    console.log(response.data);
+    
     return {
-      token: "abcwerr",
-      userCode: userEntity.userCode,
+      key: response.data.key,
+      userCode: response.data.userCode,
     };
   }
 }
