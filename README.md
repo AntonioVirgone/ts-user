@@ -7,6 +7,17 @@
 8. npm install @nestjs/testing --save-dev
 9. npx tsc --init
 
+package.json
+...
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
+...
+
 tsconfig.json
 {
   "compilerOptions": {
@@ -32,7 +43,7 @@ module.exports = {
 
 .gitignore
 node_modules/
-dest/
+dist/
 
 Command list
 
