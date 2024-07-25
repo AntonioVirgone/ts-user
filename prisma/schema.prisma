@@ -15,6 +15,8 @@ datasource db {
 
 model user {
   id Int @id @default(autoincrement())
+  username String
+  password String
   userCode String
   role String
   createdAt DateTime @default(now())
