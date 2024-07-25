@@ -7,6 +7,15 @@
 8. npm install @nestjs/testing --save-dev
 9. npx tsc --init
 
+
+Installare Prisma
+1. npm install @prisma/client
+2. npm install -D prisma
+3. npx prisma init
+
+nel file .env => DATABASE_URL="postgresql://user:password@localhost:5432/mydatabase"
+
+
 package.json
 ...
   "scripts": {
