@@ -1,14 +1,29 @@
+import axios, { AxiosRequestConfig } from "axios";
 import { TodoModel } from "../../model/TodoModel";
-import { TodoService } from "../../service/todo/TodoService";
-import { ITodoController } from "./ITodoController";
+import { ITodoRepository } from "./ITodoRepository";
 
-export class TodoController implements ITodoController {
-  todoService = new TodoService();
-
+export class TodoRepository implements ITodoRepository {
   async find(userCode: string, token: string): Promise<TodoModel[]> {
-    return await this.todoService.find(userCode, token);
+    const config: AxiosRequestConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-service-token": token,
+      },
+    };
+    const response = await axios.get<TodoModel[]>(
+      `http://localhost:3010/user/${userCode}`,
+      config
+    );
+    return response.data.map((item) => {
+      return {
+        title: item.title,
+        description: item.description,
+        status: item.status,
+        createdAt: item.createdAt,
+      };
+    });
   }
-  
+
   findById(
     userCode: string,
     token: string,
@@ -20,11 +35,11 @@ export class TodoController implements ITodoController {
   create(userCode: string, token: string, todoModel: TodoModel): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  
+
   delete(userCode: string, token: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  
+
   deleteById(userCode: string, token: string, todoId: string): Promise<void> {
     throw new Error("Method not implemented.");
   }

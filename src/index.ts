@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { UserModel } from "./model/UserModel";
 import { LoginController } from "./controller/login/LoginController";
+import { TodoController } from "./controller/todo/TodoController";
 
 const app = express();
 const port = 3030;
@@ -9,6 +10,7 @@ app.use(express.json());
 
 // Controller
 const loginController = new LoginController();
+const todoController = new TodoController();
 
 // Login
 app.post("/login", async (req: Request, res: Response) => {
@@ -25,7 +27,13 @@ app.post("/login", async (req: Request, res: Response) => {
 // Get Todo list
 app.get("/todo", async (req: Request, res: Response) => {
   try {
-    res.status(200).send([])
+    const userCode = req.query['userCode'] as string;
+    const token = req.headers['x-service-token'] as string;
+
+    console.log(`userCode: ${userCode} and token: ${token}`);
+    const result = await todoController.find(userCode, token);
+    
+    res.status(200).json(result)
   } catch (error) {
     res.status(401).json({ status: 401, message: `${error}` });
   }
