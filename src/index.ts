@@ -28,10 +28,10 @@ app.post("/login", async (req: Request, res: Response) => {
 app.get("/todo", async (req: Request, res: Response) => {
   try {
     const userCode = req.query['userCode'] as string;
-    const token = req.headers['x-service-token'] as string;
+    //const token = req.headers['x-service-token'] as string;
 
-    console.log(`userCode: ${userCode} and token: ${token}`);
-    const result = await todoController.find(userCode, token);
+    console.log(`userCode: ${userCode}`);
+    const result = await todoController.find(userCode);
     
     res.status(200).json(result)
   } catch (error) {
@@ -76,5 +76,5 @@ app.delete("/todo", async (req: Request, res: Response) => {
 })
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server ts-user is running at http://localhost:${port}`);
 });

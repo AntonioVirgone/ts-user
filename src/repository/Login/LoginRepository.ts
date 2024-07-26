@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { PrismaClient } from "@prisma/client";
 import { TokenModel } from "../../model/TokenModel";
 import { UserModel } from "../../model/UserModel";
 import { UserEntity } from "../entity/UserEntity";
 import { ILoginRepository } from "./ILoginRepository";
+import { TS_AUTH_TOKEN, TS_TODO_TOKEN } from "../../config/Secrets";
 
 
 export class LoginRepository implements ILoginRepository {
@@ -33,10 +34,21 @@ export class LoginRepository implements ILoginRepository {
   }
 
   async generateToken(userEntity: UserEntity): Promise<TokenModel> {
-    const response = await axios.post<TokenModel>('http://localhost:3020/', userEntity);
-    return {
-      key: response.data.key,
-      userCode: response.data.userCode,
-    };
+    try {
+      const config: AxiosRequestConfig = {
+        headers: {
+          "Content-Type": "application/json",
+          "x-service-token": TS_AUTH_TOKEN,
+        },
+      };
+      const response = await axios.post<TokenModel>('http://localhost:3020/', userEntity, config);      
+      return {
+        key: response.data.key,
+        userCode: response.data.userCode,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new Error(`${error}`);
+    }
   }
 }
