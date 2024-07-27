@@ -21,7 +21,7 @@ export class TodoRepository implements ITodoRepository {
       );
       return response.data.map((item) => {
         console.log(JSON.stringify(item));
-        
+
         return {
           itemId: item._id,
           title: item.title,
@@ -40,7 +40,7 @@ export class TodoRepository implements ITodoRepository {
   }
 
   async create(userCode: string, todoModel: TodoModel): Promise<void> {
-    try {      
+    try {
       await axios.post(
         `${TS_TODO_BASE_PATH}/user/${userCode}`,
         todoModel,
@@ -48,7 +48,19 @@ export class TodoRepository implements ITodoRepository {
       );
     } catch (error) {
       console.error(`${error}`);
+
+      throw new Error(`${error}`);
+    }
+  }
+
+  async createList(userCode: string): Promise<void> {
+    try {
+      console.log(userCode);
       
+      await axios.post(`${TS_TODO_BASE_PATH}/user/${userCode}/list`, {}, this.config);
+    } catch (error) {
+      console.error(`${error}`);
+
       throw new Error(`${error}`);
     }
   }

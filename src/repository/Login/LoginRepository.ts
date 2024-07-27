@@ -8,13 +8,11 @@ import { TS_AUTH_TOKEN } from "../../config/Secrets";
 import { TS_AUTH_BASE_PATH } from "../../config/Config";
 
 export class LoginRepository implements ILoginRepository {
-  prisma = new PrismaClient();
-
+  
   async findUser(userModel: UserModel): Promise<UserEntity> {
-    console.log(`${JSON.stringify(userModel)}`);
+    const prisma = new PrismaClient();
 
-
-    const user = await this.prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         username: userModel.username,
         password: userModel.password,
@@ -28,6 +26,7 @@ export class LoginRepository implements ILoginRepository {
     }
 
     const userEntity: UserEntity = {
+      username: user!.username,
       userCode: user!.userCode,
       role: user!.role,
       app: "ts-user",
