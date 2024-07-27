@@ -6,27 +6,48 @@ import { VerifyTokenRepository } from "../../repository/verifyToken/VerifyTokenR
 import { ITodoService } from "./ITodoService";
 
 export class TodoService implements ITodoService {
-    verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
-    todoRepository: ITodoRepository = new TodoRepository();
+  verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
+  todoRepository: ITodoRepository = new TodoRepository();
 
-    async find(authToken: string, userCode: string): Promise<TodoModel[]> {
-        await this.verifyTokenRepository.verify(authToken, userCode);
-        return await this.todoRepository.find(userCode);
+  async find(authToken: string, userCode: string): Promise<TodoModel[]> {
+    try {
+      await this.verifyTokenRepository.verify(authToken, userCode);
+      return await this.todoRepository.find(userCode);
+    } catch (error) {
+      throw new Error(`${error}`);
     }
-    
-    findById(userCode: string, todoId: string): Promise<TodoModel> {
-        throw new Error("Method not implemented.");
+  }
+
+  async findById(
+    authToken: string,
+    userCode: string,
+    todoId: string
+  ): Promise<TodoModel> {
+    throw new Error("Method not implemented.");
+  }
+
+  async create(
+    authToken: string,
+    userCode: string,
+    todoModel: TodoModel
+  ): Promise<void> {
+    try {
+      await this.verifyTokenRepository.verify(authToken, userCode);
+      return await this.todoRepository.create(userCode, todoModel); 
+    } catch (error) {
+      throw new Error(`${error}`);
     }
-    
-    create(userCode: string, todoModel: TodoModel): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    
-    delete(userCode: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    
-    deleteById(userCode: string, todoId: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+  }
+
+  async delete(authToken: string, userCode: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  async deleteById(
+    authToken: string,
+    userCode: string,
+    todoId: string
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }

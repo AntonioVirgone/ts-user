@@ -3,6 +3,7 @@ import { LoginController } from "./controller/login/LoginController";
 import { TodoController } from "./controller/todo/TodoController";
 import { ILoginController } from "./controller/login/ILoginController";
 import { ITodoController } from "./controller/todo/ITodoController";
+import { nextTick } from "process";
 
 const app = express();
 const port = 3030;
@@ -35,17 +36,18 @@ app.get("/todo", async (req: Request, res: Response, next: NextFunction) => {
   }
 })
 
-// Find sinle item Todo
-app.get("/todo/:todoId", async (req: Request, res: Response) => {
+// Create new Todo list
+app.post("/todo", async (req: Request, res: Response, next: NextFunction) => {
   try {
-
+    const result = await todoController.create(req, res, next);
+    res.status(201).json(result);
   } catch (error) {
     res.status(401).json({ status: 401, message: `${error}` });
   }
 })
 
-// Create new Todo list
-app.post("/todo", async (req: Request, res: Response) => {
+// Find sinle item Todo
+app.get("/todo/:todoId", async (req: Request, res: Response, next: NextFunction) => {
   try {
 
   } catch (error) {
@@ -54,7 +56,7 @@ app.post("/todo", async (req: Request, res: Response) => {
 })
 
 // Delete Todo list
-app.delete("/todo", async (req: Request, res: Response) => {
+app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
   try {
 
   } catch (error) {
@@ -63,7 +65,7 @@ app.delete("/todo", async (req: Request, res: Response) => {
 })
 
 // Delete item from Todo list
-app.delete("/todo", async (req: Request, res: Response) => {
+app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
   try {
 
   } catch (error) {

@@ -15,24 +15,46 @@ export class TodoController implements ITodoController {
     next: NextFunction
   ): Promise<TodoModel[]> {
     const authToken = req.headers["app-token"] as string;
-    const userCode = req.query["userCode"] as string;
-    
+    const userCode = req.query["user_code"] as string;
+
     return await this.todoService.find(authToken, userCode);
   }
 
-  findById(userCode: string, todoId: string): Promise<TodoModel> {
+  @Auth
+  async findById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<TodoModel> {
+    const authToken = req.headers["app-token"] as string;
+    const userCode = req.query["user_code"] as string;
+
+    // userCode, todoItemId
     throw new Error("Method not implemented.");
   }
 
-  create(userCode: string, todoModel: TodoModel): Promise<void> {
+  @Auth
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const authToken: string = req.headers["app-token"] as string;
+    const userCode: string = req.query["user_code"] as string;
+    const todoModel: TodoModel = req.body;
+    
+    return await this.todoService.create(authToken, userCode, todoModel);
+  }
+
+  @Auth
+  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+    // userCode
     throw new Error("Method not implemented.");
   }
 
-  delete(userCode: string): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  deleteById(userCode: string, todoId: string): Promise<void> {
+  @Auth
+  async deleteById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    // userCode, todoItemId
     throw new Error("Method not implemented.");
   }
 }
