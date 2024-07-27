@@ -10,15 +10,14 @@ export class TodoService implements ITodoService {
   todoRepository: ITodoRepository = new TodoRepository();
 
   async find(authToken: string, userCode: string): Promise<TodoModel[]> {
-    try {
-      return await this.verifyTokenRepository
-        .verify(authToken, userCode)
-        .then(() => {
-          return this.todoRepository.find(userCode);
-        });
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.find(userCode);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 
   async findById(
@@ -34,24 +33,25 @@ export class TodoService implements ITodoService {
     userCode: string,
     todoModel: TodoModel
   ): Promise<void> {
-    try {
-      await this.verifyTokenRepository.verify(authToken, userCode);
-      return await this.todoRepository.create(userCode, todoModel);
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.create(userCode, todoModel);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 
   async delete(authToken: string, userCode: string): Promise<void> {
-    try {
-      return await this.verifyTokenRepository
-        .verify(authToken, userCode)
-        .then(() => {
-          return this.todoRepository.delete(userCode);
-        });
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.delete(userCode);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 
   async deleteById(
@@ -59,6 +59,13 @@ export class TodoService implements ITodoService {
     userCode: string,
     todoId: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.deleteById(userCode, todoId);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 }
