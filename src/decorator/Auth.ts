@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { MessageError } from "../model/MessageError";
 import { X_SERVICE_TOKEN } from "../config/Secrets";
+import { MessageError } from "ts-av-common";
 
 export function Auth(
   target: any,

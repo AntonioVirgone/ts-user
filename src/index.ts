@@ -1,7 +1,8 @@
-import express, { Request, Response } from "express";
-import { UserModel } from "./model/UserModel";
+import express, { NextFunction, Request, Response } from "express";
 import { LoginController } from "./controller/login/LoginController";
 import { TodoController } from "./controller/todo/TodoController";
+import { ILoginController } from "./controller/login/ILoginController";
+import { ITodoController } from "./controller/todo/ITodoController";
 
 const app = express();
 const port = 3030;
@@ -9,33 +10,28 @@ const port = 3030;
 app.use(express.json());
 
 // Controller
-const loginController = new LoginController();
-const todoController = new TodoController();
+const loginController: ILoginController = new LoginController();
+const todoController: ITodoController = new TodoController();
 
 // Login
-app.post("/login", async (req: Request, res: Response) => {
+app.post("/login", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user: UserModel = req.body;
-    const response = await loginController.login(user);
+    const result = await loginController.login(req, res, next);
 
-    res.status(200).json(response);
+    res.status(200).json(result);
   } catch (error) {
     res.status(401).json({ status: 401, message: `${error}` });
   }
 });
 
 // Get Todo list
-app.get("/todo", async (req: Request, res: Response) => {
+app.get("/todo", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userCode = req.query['userCode'] as string;
-    //const token = req.headers['x-service-token'] as string;
-
-    console.log(`userCode: ${userCode}`);
-    const result = await todoController.find(userCode);
+    const result = await todoController.find(req, res, next);
     
     res.status(200).json(result)
   } catch (error) {
-    res.status(401).json({ status: 401, message: `${error}` });
+    res.status(401).json({ status: 404, message: `${error}` });
   }
 })
 
