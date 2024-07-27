@@ -14,9 +14,13 @@ export class TodoController implements ITodoController {
     res: Response,
     next: NextFunction
   ): Promise<TodoModel[]> {
+    const authToken = req.headers["app-token"] as string;
     const userCode = req.query["userCode"] as string;
+
     console.log(`userCode: ${userCode}`);
-    return await this.todoService.find(userCode);
+    console.log(`auth ${authToken}`);
+    
+    return await this.todoService.find(authToken, userCode);
   }
 
   findById(userCode: string, todoId: string): Promise<TodoModel> {

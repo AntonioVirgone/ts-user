@@ -4,7 +4,7 @@ import { TokenModel } from "../../model/TokenModel";
 import { UserModel } from "../../model/UserModel";
 import { UserEntity } from "../entity/UserEntity";
 import { ILoginRepository } from "./ILoginRepository";
-import { TS_AUTH_TOKEN, TS_TODO_TOKEN } from "../../config/Secrets";
+import { TS_AUTH_TOKEN } from "../../config/Secrets";
 import { TS_AUTH_BASE_PATH } from "../../config/Config";
 
 
