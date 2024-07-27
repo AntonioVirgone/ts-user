@@ -93,8 +93,10 @@ app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Delete item from Todo list
-app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
+app.delete("/todo/:todoItemId", async (req: Request, res: Response, next: NextFunction) => {
   try {
+    await todoController.deleteById(req, res, next);
+    res.status(200).json();
   } catch (error) {
     res.status(401).json({ status: 401, message: `${error}` });
   }

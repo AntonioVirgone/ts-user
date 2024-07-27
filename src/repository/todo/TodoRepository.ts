@@ -50,22 +50,30 @@ export class TodoRepository implements ITodoRepository {
   }
 
   async createList(userCode: string): Promise<void> {
-    try {      
-      await axios.post(`${TS_TODO_BASE_PATH}/user/${userCode}/list`, {}, this.config);
+    try {
+      await axios.post(
+        `${TS_TODO_BASE_PATH}/user/${userCode}/list`,
+        {},
+        this.config
+      );
     } catch (error) {
       throw new Error(`${error}`);
     }
   }
 
   async delete(userCode: string): Promise<void> {
-    try {
-      await axios.delete(`${TS_TODO_BASE_PATH}/user/${userCode}`, this.config);
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    await axios
+      .delete(`${TS_TODO_BASE_PATH}/user/${userCode}`, this.config)
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 
-  deleteById(userCode: string, todoId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteById(userCode: string, todoId: string): Promise<void> {
+    await axios
+      .delete(`${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}`, this.config)
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 }

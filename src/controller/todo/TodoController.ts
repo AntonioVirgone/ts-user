@@ -56,7 +56,10 @@ export class TodoController implements ITodoController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    // userCode, todoItemId
-    throw new Error("Method not implemented.");
+    const authToken: string = req.headers["app-token"] as string;
+    const userCode: string = req.query["user_code"] as string;
+    const { todoItemId } = req.params;
+
+    return await this.todoService.deleteById(authToken, userCode, todoItemId);
   }
 }
