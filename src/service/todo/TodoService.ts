@@ -11,9 +11,11 @@ export class TodoService implements ITodoService {
 
   async find(authToken: string, userCode: string): Promise<TodoModel[]> {
     try {
-      return await this.verifyTokenRepository.verify(authToken, userCode).then(() => {
-        return this.todoRepository.find(userCode);
-      });
+      return await this.verifyTokenRepository
+        .verify(authToken, userCode)
+        .then(() => {
+          return this.todoRepository.find(userCode);
+        });
     } catch (error) {
       throw new Error(`${error}`);
     }
@@ -27,17 +29,6 @@ export class TodoService implements ITodoService {
     throw new Error("Method not implemented.");
   }
 
-  async createList(authToken: string, userCode: string): Promise<void> {
-    try {
-      await this.verifyTokenRepository.verify(authToken, userCode).then(() => {
-
-      });
-
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
-  }
-  
   async create(
     authToken: string,
     userCode: string,
@@ -45,14 +36,22 @@ export class TodoService implements ITodoService {
   ): Promise<void> {
     try {
       await this.verifyTokenRepository.verify(authToken, userCode);
-      return await this.todoRepository.create(userCode, todoModel); 
+      return await this.todoRepository.create(userCode, todoModel);
     } catch (error) {
       throw new Error(`${error}`);
     }
   }
 
   async delete(authToken: string, userCode: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    try {
+      return await this.verifyTokenRepository
+        .verify(authToken, userCode)
+        .then(() => {
+          return this.todoRepository.delete(userCode);
+        });
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
   async deleteById(
