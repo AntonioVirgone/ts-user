@@ -1,6 +1,6 @@
 import { TokenModel } from "../../model/TokenModel";
-import { UserModel } from "../../model/UserModel";
+import { Request, Response, NextFunction } from "express";
 
 export interface ILoginController {
-    login(user: UserModel): Promise<TokenModel>;
+  login(req: Request, res: Response, next: NextFunction): Promise<TokenModel>;
 }
