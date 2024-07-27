@@ -23,7 +23,7 @@ app.post("/register", async (req: Request, res: Response, next: NextFunction) =>
     registerController.register(req, res, next);
     res.status(201).json();
   } catch (error) {
-    const messageError: MessageError = new MessageError(401, `${error}`);
+    const messageError: MessageError = new MessageError(409, `${error}`);
     res.status(messageError.getMessageError().status).json(messageError.getMessageError());
   }
 });

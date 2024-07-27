@@ -1,38 +1,30 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { PrismaClient } from "@prisma/client";
 import { TokenModel } from "../../model/TokenModel";
 import { UserModel } from "../../model/UserModel";
 import { UserEntity } from "../entity/UserEntity";
 import { ILoginRepository } from "./ILoginRepository";
 import { TS_AUTH_TOKEN } from "../../config/Secrets";
 import { TS_AUTH_BASE_PATH } from "../../config/Config";
+import { IFindUserRepository } from "../user/find/IFindUserRepository";
+import { FindUserRepository } from "../user/find/FindUserRepository";
 
 export class LoginRepository implements ILoginRepository {
-  
+  findUserRrpository: IFindUserRepository = new FindUserRepository();
+
   async findUser(userModel: UserModel): Promise<UserEntity> {
-    const prisma = new PrismaClient();
-
-    const user = await prisma.user.findFirst({
-      where: {
-        username: userModel.username,
-        password: userModel.password,
-      },
-    });
-
-    console.log(user);
+    let user = await this.findUserRrpository.find(
+      userModel.username,
+      userModel.password
+    );
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    const userEntity: UserEntity = {
-      username: user!.username,
-      userCode: user!.userCode,
-      role: user!.role,
+    return {
+      ...user,
       app: "ts-user",
     };
-
-    return userEntity;
   }
 
   async generateToken(userEntity: UserEntity): Promise<TokenModel> {

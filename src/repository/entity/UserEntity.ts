@@ -6,3 +6,5 @@ export type UserEntity = {
     app?: string,
     createdAt?: Date
 }
+
+export type NullableUserEntity = UserEntity | null;

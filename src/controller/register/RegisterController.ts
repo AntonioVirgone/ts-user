@@ -15,6 +15,6 @@ export class RegisterController implements IRegisterController {
     next: NextFunction
   ): Promise<void> {
     const user: UserModel = req.body;
-    this.registerService.register(user);
+    return await this.registerService.register(user);
   }
 }
