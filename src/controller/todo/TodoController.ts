@@ -34,18 +34,6 @@ export class TodoController implements ITodoController {
   }
 
   @Auth
-  async createList(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const authToken = req.headers["app-token"] as string;
-    const userCode = req.query["user_code"] as string;
-
-    return await this.todoService.createList(authToken, userCode);
-  }
-
-  @Auth
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     const authToken: string = req.headers["app-token"] as string;
     const userCode: string = req.query["user_code"] as string;
@@ -56,8 +44,10 @@ export class TodoController implements ITodoController {
 
   @Auth
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
-    // userCode
-    throw new Error("Method not implemented.");
+    const authToken = req.headers["app-token"] as string;
+    const userCode = req.query["user_code"] as string;
+
+    return await this.todoService.delete(authToken, userCode);
   }
 
   @Auth

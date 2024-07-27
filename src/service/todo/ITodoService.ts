@@ -7,7 +7,6 @@ export interface ITodoService {
     userCode: string,
     todoId: string
   ): Promise<TodoModel>;
-  createList(authToken: string, userCode: string): Promise<void>;
   create(
     authToken: string,
     userCode: string,

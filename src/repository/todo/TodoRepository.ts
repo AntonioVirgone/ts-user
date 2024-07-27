@@ -20,8 +20,6 @@ export class TodoRepository implements ITodoRepository {
         this.config
       );
       return response.data.map((item) => {
-        console.log(JSON.stringify(item));
-
         return {
           itemId: item._id,
           title: item.title,
@@ -47,26 +45,24 @@ export class TodoRepository implements ITodoRepository {
         this.config
       );
     } catch (error) {
-      console.error(`${error}`);
-
       throw new Error(`${error}`);
     }
   }
 
   async createList(userCode: string): Promise<void> {
-    try {
-      console.log(userCode);
-      
+    try {      
       await axios.post(`${TS_TODO_BASE_PATH}/user/${userCode}/list`, {}, this.config);
     } catch (error) {
-      console.error(`${error}`);
-
       throw new Error(`${error}`);
     }
   }
 
-  delete(userCode: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async delete(userCode: string): Promise<void> {
+    try {
+      await axios.delete(`${TS_TODO_BASE_PATH}/user/${userCode}`, this.config);
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
   deleteById(userCode: string, todoId: string): Promise<void> {
