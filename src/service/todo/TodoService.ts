@@ -11,8 +11,9 @@ export class TodoService implements ITodoService {
 
   async find(authToken: string, userCode: string): Promise<TodoModel[]> {
     try {
-      await this.verifyTokenRepository.verify(authToken, userCode);
-      return await this.todoRepository.find(userCode);
+      return await this.verifyTokenRepository.verify(authToken, userCode).then(() => {
+        return this.todoRepository.find(userCode);
+      });
     } catch (error) {
       throw new Error(`${error}`);
     }
@@ -26,6 +27,17 @@ export class TodoService implements ITodoService {
     throw new Error("Method not implemented.");
   }
 
+  async createList(authToken: string, userCode: string): Promise<void> {
+    try {
+      await this.verifyTokenRepository.verify(authToken, userCode).then(() => {
+
+      });
+
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
+  
   async create(
     authToken: string,
     userCode: string,
