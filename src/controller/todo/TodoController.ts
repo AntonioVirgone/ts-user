@@ -34,11 +34,23 @@ export class TodoController implements ITodoController {
   }
 
   @Auth
+  async createList(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const authToken = req.headers["app-token"] as string;
+    const userCode = req.query["user_code"] as string;
+
+    return await this.todoService.createList(authToken, userCode);
+  }
+
+  @Auth
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     const authToken: string = req.headers["app-token"] as string;
     const userCode: string = req.query["user_code"] as string;
     const todoModel: TodoModel = req.body;
-    
+
     return await this.todoService.create(authToken, userCode, todoModel);
   }
 
