@@ -3,8 +3,9 @@ import { LoginController } from "./controller/login/LoginController";
 import { TodoController } from "./controller/todo/TodoController";
 import { ILoginController } from "./controller/login/ILoginController";
 import { ITodoController } from "./controller/todo/ITodoController";
-import { nextTick } from "process";
 import { MessageError } from "ts-av-common";
+import { IRegisterController } from "./controller/register/IRegisterController";
+import { RegisterController } from "./controller/register/RegisterController";
 
 const app = express();
 const port = 3030;
@@ -14,13 +15,15 @@ app.use(express.json());
 // Controller
 const loginController: ILoginController = new LoginController();
 const todoController: ITodoController = new TodoController();
+const registerController: IRegisterController = new RegisterController();
 
 // Register new user
 app.post("/register", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(201).json({username: "username", password: "password"});
+    registerController.register(req, res, next);
+    res.status(201).json();
   } catch (error) {
-    const messageError: MessageError = new MessageError(401, `${error}`);
+    const messageError: MessageError = new MessageError(409, `${error}`);
     res.status(messageError.getMessageError().status).json(messageError.getMessageError());
   }
 });
