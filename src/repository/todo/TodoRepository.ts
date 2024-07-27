@@ -3,6 +3,7 @@ import { TodoModel } from "../../model/TodoModel";
 import { TS_TODO_TOKEN } from "../../config/Secrets";
 import { ITodoRepository } from "./ITodoRepository";
 import { TS_TODO_BASE_PATH } from "../../config/Config";
+import { TodoResponse } from "../response/todo/TodoResponse";
 
 export class TodoRepository implements ITodoRepository {
   config: AxiosRequestConfig = {
@@ -14,12 +15,15 @@ export class TodoRepository implements ITodoRepository {
 
   async find(userCode: string): Promise<TodoModel[]> {
     try {
-      const response = await axios.get<TodoModel[]>(
+      const response = await axios.get<TodoResponse[]>(
         `${TS_TODO_BASE_PATH}/user/${userCode}`,
         this.config
       );
       return response.data.map((item) => {
+        console.log(JSON.stringify(item));
+        
         return {
+          itemId: item._id,
           title: item.title,
           description: item.description,
           status: item.status,
@@ -27,7 +31,6 @@ export class TodoRepository implements ITodoRepository {
         };
       });
     } catch (error) {
-      // console.error(error);
       throw new Error(`${error}`);
     }
   }
