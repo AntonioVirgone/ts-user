@@ -1,29 +1,36 @@
+import { Request, Response, NextFunction } from "express";
 import { TodoModel } from "../../model/TodoModel";
-import { TodoService } from "../../service/todo/TodoService";
 import { ITodoController } from "./ITodoController";
+import { Auth } from "../../decorator/Auth";
+import { TodoService } from "../../service/todo/TodoService";
+import { ITodoService } from "../../service/todo/ITodoService";
 
 export class TodoController implements ITodoController {
-  todoService = new TodoService();
+  todoService: ITodoService = new TodoService();
 
-  async find(userCode: string): Promise<TodoModel[]> {
+  @Auth
+  async find(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<TodoModel[]> {
+    const userCode = req.query["userCode"] as string;
+    console.log(`userCode: ${userCode}`);
     return await this.todoService.find(userCode);
   }
-  
-  findById(
-    userCode: string,
-    todoId: string
-  ): Promise<TodoModel> {
+
+  findById(userCode: string, todoId: string): Promise<TodoModel> {
     throw new Error("Method not implemented.");
   }
 
   create(userCode: string, todoModel: TodoModel): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  
+
   delete(userCode: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  
+
   deleteById(userCode: string, todoId: string): Promise<void> {
     throw new Error("Method not implemented.");
   }

@@ -1,9 +1,10 @@
 import { TodoModel } from "../../model/TodoModel";
+import { ITodoRepository } from "../../repository/todo/ITodoRepository";
 import { TodoRepository } from "../../repository/todo/TodoRepository";
 import { ITodoService } from "./ITodoService";
 
 export class TodoService implements ITodoService {
-    todoRepository = new TodoRepository();
+    todoRepository: ITodoRepository = new TodoRepository();
 
     async find(userCode: string): Promise<TodoModel[]> {
         return await this.todoRepository.find(userCode);
