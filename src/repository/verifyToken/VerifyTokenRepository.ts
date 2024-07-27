@@ -12,7 +12,7 @@ export class VerifyTokenRepository implements IVerifyTokenRepository {
           "x-service-token": TS_AUTH_TOKEN,
         },
       };
-      const response = await axios.post(
+      return await axios.post(
         `${TS_AUTH_BASE_PATH}/verify`,
         {
           key: authToken,
@@ -20,10 +20,7 @@ export class VerifyTokenRepository implements IVerifyTokenRepository {
         },
         config
       );
-
-      // console.log(response);
     } catch (error) {
-      // console.error(error);
       throw new Error(`${error}`);
     }
   }
