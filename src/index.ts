@@ -72,11 +72,12 @@ app.get("/todo", async (req: Request, res: Response, next: NextFunction) => {
 app.get(
   "/todo/:todoId",
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // TODO:
-    } catch (error) {
-      res.status(401).json({ status: 401, message: `${error}` });
-    }
+    await todoController
+      .findById(req, res, next)
+      .then((result) => res.status(200).json(result))
+      .catch((error) => {
+        res.status(400).json({ status: 400, message: `${error}` });
+      });
   }
 );
 
