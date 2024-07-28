@@ -1,10 +1,15 @@
-# Utilizza l'immagine ufficiale di PostgreSQL come base
-FROM postgres:13
+FROM node:20
 
-# Imposta le variabili d'ambiente necessarie
-ENV POSTGRES_DB=user
-ENV POSTGRES_USER=ts-user
-ENV POSTGRES_PASSWORD=ts-pass
+WORKDIR /app
 
-# Espone la porta 5432
-EXPOSE 5432
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3030
+
+CMD [ "npm", "start" ]

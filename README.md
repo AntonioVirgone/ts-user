@@ -26,6 +26,15 @@ Istruzioni Docker
 docker build -t ts_user .
 docker run --name ts_user-container -d -p 5432:5432 ts_user
 
+Istruzioni Docker
+docker build -t ts-user .
+docker run --name ts-user-container -d -p 3030:3030 ts-user
+
+Update image
+docker build -t ts-user .
+docker stop ts-user-container
+docker rm ts-user-container
+docker run --name ts-user-container -d -p 3030:3030 ts-user
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

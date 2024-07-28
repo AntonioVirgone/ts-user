@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3030:3030"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: "postgresql://ts-user:ts-pass@postgres:5432/user?schema=public"
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ts-user
+      POSTGRES_PASSWORD: ts-pass
+      POSTGRES_DB: user
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:
