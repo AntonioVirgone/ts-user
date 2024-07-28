@@ -4,6 +4,7 @@ import { TS_TODO_TOKEN } from "../../config/Secrets";
 import { ITodoRepository } from "./ITodoRepository";
 import { TS_TODO_BASE_PATH } from "../../config/Config";
 import { TodoResponse } from "../response/todo/TodoResponse";
+import { TodoStatus } from "../../model/TodoStatus";
 
 export class TodoRepository implements ITodoRepository {
   config: AxiosRequestConfig = {
@@ -33,8 +34,24 @@ export class TodoRepository implements ITodoRepository {
     }
   }
 
-  findById(userCode: string, todoId: string): Promise<TodoModel> {
-    throw new Error("Method not implemented.");
+  async findById(userCode: string, todoId: string): Promise<TodoModel> {
+    try {
+      console.log(`Find item by userCode: ${userCode} and itemId: ${todoId}`);
+      
+      const response = await axios.get<TodoResponse>(
+        `${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}`,
+        this.config
+      );
+      return {
+        itemId: response.data._id,
+        title: response.data.title,
+        description: response.data.description,
+        status: response.data.status,
+        createdAt: response.data.createdAt,
+      };
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
   }
 
   async create(userCode: string, todoModel: TodoModel): Promise<void> {
@@ -71,9 +88,29 @@ export class TodoRepository implements ITodoRepository {
 
   async deleteById(userCode: string, todoId: string): Promise<void> {
     await axios
-      .delete(`${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}`, this.config)
+      .delete(
+        `${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}`,
+        this.config
+      )
       .catch((error) => {
         throw new Error(`${error}`);
+      });
+  }
+
+  async changeStatus(
+    userCode: string,
+    todoId: string,
+    status: TodoStatus
+  ): Promise<void> {
+    console.log("change status");
+    
+    await axios
+      .patch(
+        `${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}/status/${status}`,
+        this.config
+      )
+      .catch((error) => {
+        throw new Error(`Error change status: ${error}`);
       });
   }
 }

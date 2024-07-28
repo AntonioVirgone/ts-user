@@ -1,4 +1,5 @@
 import { TodoModel } from "../../model/TodoModel";
+import { TodoStatus } from "../../model/TodoStatus";
 
 export interface ITodoRepository {
   find(userCode: string): Promise<TodoModel[]>;
@@ -7,4 +8,5 @@ export interface ITodoRepository {
   create(userCode: string, todoModel: TodoModel): Promise<void>;
   delete(userCode: string): Promise<void>;
   deleteById(userCode: string, todoId: string): Promise<void>;
+  changeStatus(userCode: string, todoId: string, status: TodoStatus): Promise<void>;
 }

@@ -1,9 +1,13 @@
+import { todo } from "node:test";
 import { TodoModel } from "../../model/TodoModel";
+import { TodoStatus } from "../../model/TodoStatus";
 import { ITodoRepository } from "../../repository/todo/ITodoRepository";
 import { TodoRepository } from "../../repository/todo/TodoRepository";
 import { IVerifyTokenRepository } from "../../repository/verifyToken/IVerifyTokenRepository";
 import { VerifyTokenRepository } from "../../repository/verifyToken/VerifyTokenRepository";
 import { ITodoService } from "./ITodoService";
+import { stat } from "node:fs";
+import { error } from "node:console";
 
 export class TodoService implements ITodoService {
   verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
@@ -25,7 +29,20 @@ export class TodoService implements ITodoService {
     userCode: string,
     todoId: string
   ): Promise<TodoModel> {
-    throw new Error("Method not implemented.");
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(async () => {
+        return await this.todoRepository
+          .findById(userCode, todoId)
+          .catch((error) => {
+            console.error(`${error}`);
+            throw new Error("Todo item not found");
+          });
+      })
+      .catch((error) => {
+        console.error(`${error}`);
+        throw new Error(`${error}`);
+      });
   }
 
   async create(
@@ -63,6 +80,32 @@ export class TodoService implements ITodoService {
       .verify(authToken, userCode)
       .then(() => {
         return this.todoRepository.deleteById(userCode, todoId);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
+  }
+
+  async changeStatus(
+    authToken: string,
+    userCode: string,
+    todoId: string,
+    status: string
+  ): Promise<void> {
+    const isStatus = (value: any): value is TodoStatus => {
+      return Object.values(TodoStatus).includes(value);
+    };
+
+    if (!isStatus(status)) {
+      throw new Error("Status not valid");
+    } else {
+      console.log("status is valid");
+    }
+
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.changeStatus(userCode, todoId, status);
       })
       .catch((error) => {
         throw new Error(`${error}`);

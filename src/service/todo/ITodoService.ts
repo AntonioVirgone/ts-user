@@ -18,4 +18,10 @@ export interface ITodoService {
     userCode: string,
     todoId: string
   ): Promise<void>;
+  changeStatus(
+    authToken: string,
+    userCode: string,
+    todoId: string,
+    status: string
+  ): Promise<void>;
 }

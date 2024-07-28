@@ -28,9 +28,11 @@ export class TodoController implements ITodoController {
   ): Promise<TodoModel> {
     const authToken = req.headers["app-token"] as string;
     const userCode = req.query["user_code"] as string;
+    const { todoItemId } = req.params;
+    console.log(`todo id ${todoItemId}`);
+    
 
-    // userCode, todoItemId
-    throw new Error("Method not implemented.");
+    return this.todoService.findById(authToken, userCode, todoItemId);
   }
 
   @Auth
@@ -61,5 +63,25 @@ export class TodoController implements ITodoController {
     const { todoItemId } = req.params;
 
     return await this.todoService.deleteById(authToken, userCode, todoItemId);
+  }
+
+  @Auth
+  async changeStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const authToken: string = req.headers["app-token"] as string;
+    const userCode: string = req.query["user_code"] as string;
+    const { todoItemId, status } = req.params;
+
+    console.log(`change status item with id ${todoItemId} in ${status}`);
+    
+    await this.todoService.changeStatus(
+      authToken,
+      userCode,
+      todoItemId,
+      status
+    );
   }
 }
