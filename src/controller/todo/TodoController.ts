@@ -28,9 +28,9 @@ export class TodoController implements ITodoController {
   ): Promise<TodoModel> {
     const authToken = req.headers["app-token"] as string;
     const userCode = req.query["user_code"] as string;
+    const { todoItemId } = req.params;
 
-    // userCode, todoItemId
-    throw new Error("Method not implemented.");
+    return this.todoService.findById(authToken, userCode, todoItemId);
   }
 
   @Auth
