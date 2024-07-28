@@ -1,4 +1,4 @@
 export enum TodoStatus {
-    BACK = "BACK",
-    NEXT = "NEXT"
+    BACK = "back",
+    NEXT = "next"
 }

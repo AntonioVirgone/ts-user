@@ -5,6 +5,7 @@ import { ITodoRepository } from "./ITodoRepository";
 import { TS_TODO_BASE_PATH } from "../../config/Config";
 import { TodoResponse } from "../response/todo/TodoResponse";
 import { todo } from "node:test";
+import { TodoStatus } from "../../model/TodoStatus";
 
 export class TodoRepository implements ITodoRepository {
   config: AxiosRequestConfig = {
@@ -92,6 +93,23 @@ export class TodoRepository implements ITodoRepository {
       )
       .catch((error) => {
         throw new Error(`${error}`);
+      });
+  }
+
+  async changeStatus(
+    userCode: string,
+    todoId: string,
+    status: TodoStatus
+  ): Promise<void> {
+    console.log("change status");
+    
+    await axios
+      .patch(
+        `${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}/status/${status}`,
+        this.config
+      )
+      .catch((error) => {
+        throw new Error(`Error change status: ${error}`);
       });
   }
 }

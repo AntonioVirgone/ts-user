@@ -111,6 +111,8 @@ app.delete(
 app.patch(
   "/todo/:todoItemId/status/:status",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("change status");
+    
     await todoController
       .changeStatus(req, res, next)
       .then(() => res.status(200).json())

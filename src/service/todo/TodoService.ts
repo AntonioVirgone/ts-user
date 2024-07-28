@@ -1,9 +1,12 @@
+import { todo } from "node:test";
 import { TodoModel } from "../../model/TodoModel";
+import { TodoStatus } from "../../model/TodoStatus";
 import { ITodoRepository } from "../../repository/todo/ITodoRepository";
 import { TodoRepository } from "../../repository/todo/TodoRepository";
 import { IVerifyTokenRepository } from "../../repository/verifyToken/IVerifyTokenRepository";
 import { VerifyTokenRepository } from "../../repository/verifyToken/VerifyTokenRepository";
 import { ITodoService } from "./ITodoService";
+import { stat } from "node:fs";
 
 export class TodoService implements ITodoService {
   verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
@@ -76,6 +79,23 @@ export class TodoService implements ITodoService {
     todoId: string,
     status: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    const isStatus = (value: any): value is TodoStatus => {
+      return Object.values(TodoStatus).includes(value);
+    };
+
+    if (!isStatus(status)) {
+      throw new Error("Status not valid");
+    } else {
+      console.log("status is valid");
+    }
+
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(() => {
+        return this.todoRepository.changeStatus(userCode, todoId, status);
+      })
+      .catch((error) => {
+        throw new Error(`${error}`);
+      });
   }
 }
