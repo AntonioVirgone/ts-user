@@ -37,37 +37,35 @@ app.post(
 
 // Login
 app.post("/login", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await loginController.login(req, res, next);
-
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(401).json({ status: 401, message: `${error}` });
-  }
+  await loginController
+    .login(req, res, next)
+    .then((result) => res.status(200).json(result))
+    .catch((error) =>
+      res.status(401).json({ status: 401, message: `${error}` })
+    );
 });
 
 // Create new Todo item
 app.post("/todo", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await todoController.create(req, res, next);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(401).json({ status: 401, message: `${error}` });
-  }
+  await todoController
+    .create(req, res, next)
+    .then((result) => res.status(201).json(result))
+    .catch((error) =>
+      res.status(400).json({ status: 400, message: `${error}` })
+    );
 });
 
 // Get Todo list
 app.get("/todo", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await todoController.find(req, res, next);
-
-    res.status(200).json(result);
-  } catch (error) {
-    const messageError: MessageError = new MessageError(401, `${error}`);
-    res
-      .status(messageError.getMessageError().status)
-      .json(messageError.getMessageError());
-  }
+  await todoController
+    .find(req, res, next)
+    .then((result) => res.status(200).json(result))
+    .catch((error) => {
+      const messageError: MessageError = new MessageError(401, `${error}`);
+      res
+        .status(messageError.getMessageError().status)
+        .json(messageError.getMessageError());
+    });
 });
 
 // Find sinle item Todo
@@ -75,6 +73,7 @@ app.get(
   "/todo/:todoId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // TODO:
     } catch (error) {
       res.status(401).json({ status: 401, message: `${error}` });
     }
@@ -83,27 +82,27 @@ app.get(
 
 // Delete Todo list
 app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await todoController.delete(req, res, next);
-    res.status(200).json();
-  } catch (error) {
-    const messageError: MessageError = new MessageError(400, `${error}`);
-    res
-      .status(messageError.getMessageError().status)
-      .json(messageError.getMessageError());
-  }
+  await todoController
+    .delete(req, res, next)
+    .then(() => res.status(200).json())
+    .catch((error) => {
+      const messageError: MessageError = new MessageError(400, `${error}`);
+      res
+        .status(messageError.getMessageError().status)
+        .json(messageError.getMessageError());
+    });
 });
 
 // Delete item from Todo list
 app.delete(
   "/todo/:todoItemId",
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await todoController.deleteById(req, res, next);
-      res.status(200).json();
-    } catch (error) {
-      res.status(401).json({ status: 401, message: `${error}` });
-    }
+    await todoController
+      .deleteById(req, res, next)
+      .then(() => res.status(200).json())
+      .catch((error) =>
+        res.status(401).json({ status: 400, message: `${error}` })
+      );
   }
 );
 
