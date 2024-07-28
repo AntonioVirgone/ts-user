@@ -7,4 +7,5 @@ export interface ITodoController {
   create(req: Request, res: Response, next: NextFunction): Promise<void>;
   delete(req: Request, res: Response, next: NextFunction): Promise<void>;
   deleteById(req: Request, res: Response, next: NextFunction): Promise<void>;
+  changeStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

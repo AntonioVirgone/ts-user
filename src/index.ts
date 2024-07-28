@@ -109,7 +109,14 @@ app.delete(
 // Change item status at next or back value of state
 app.patch(
   "/todo/:todoItemId/status/:status",
-  async (req: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    await todoController
+      .changeStatus(req, res, next)
+      .then(() => res.status(200).json())
+      .catch((error) =>
+        res.status(400).json({ status: 400, message: `${error}` })
+      );
+  }
 );
 
 app.listen(port, () => {

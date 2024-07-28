@@ -62,4 +62,17 @@ export class TodoController implements ITodoController {
 
     return await this.todoService.deleteById(authToken, userCode, todoItemId);
   }
+
+  @Auth
+  async changeStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const authToken: string = req.headers["app-token"] as string;
+    const userCode: string = req.query["user_code"] as string;
+    const { todoItemId, status } = req.params;
+
+    
+  }
 }
