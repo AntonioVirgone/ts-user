@@ -21,15 +21,17 @@ const registerController: IRegisterController = new RegisterController();
 app.post(
   "/register",
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      registerController.register(req, res, next);
-      res.status(201).json();
-    } catch (error) {
-      const messageError: MessageError = new MessageError(409, `${error}`);
-      res
-        .status(messageError.getMessageError().status)
-        .json(messageError.getMessageError());
-    }
+    await registerController
+      .register(req, res, next)
+      .then(() => {
+        res.status(201).json();
+      })
+      .catch((error) => {
+        const messageError: MessageError = new MessageError(409, `${error}`);
+        res
+          .status(messageError.getMessageError().status)
+          .json(messageError.getMessageError());
+      });
   }
 );
 
@@ -93,14 +95,23 @@ app.delete("/todo", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Delete item from Todo list
-app.delete("/todo/:todoItemId", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await todoController.deleteById(req, res, next);
-    res.status(200).json();
-  } catch (error) {
-    res.status(401).json({ status: 401, message: `${error}` });
+app.delete(
+  "/todo/:todoItemId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await todoController.deleteById(req, res, next);
+      res.status(200).json();
+    } catch (error) {
+      res.status(401).json({ status: 401, message: `${error}` });
+    }
   }
-});
+);
+
+// Change item status at next or back value of state
+app.patch(
+  "/todo/:todoItemId/status/:status",
+  async (req: Request, res: Response, next: NextFunction) => {}
+);
 
 app.listen(port, () => {
   console.log(`Server ts-user is running at http://localhost:${port}`);
