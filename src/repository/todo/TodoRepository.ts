@@ -4,7 +4,6 @@ import { TS_TODO_TOKEN } from "../../config/Secrets";
 import { ITodoRepository } from "./ITodoRepository";
 import { TS_TODO_BASE_PATH } from "../../config/Config";
 import { TodoResponse } from "../response/todo/TodoResponse";
-import { todo } from "node:test";
 import { TodoStatus } from "../../model/TodoStatus";
 
 export class TodoRepository implements ITodoRepository {
@@ -37,6 +36,8 @@ export class TodoRepository implements ITodoRepository {
 
   async findById(userCode: string, todoId: string): Promise<TodoModel> {
     try {
+      console.log(`Find item by userCode: ${userCode} and itemId: ${todoId}`);
+      
       const response = await axios.get<TodoResponse>(
         `${TS_TODO_BASE_PATH}/user/${userCode}/item/${todoId}`,
         this.config

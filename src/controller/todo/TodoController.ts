@@ -29,6 +29,8 @@ export class TodoController implements ITodoController {
     const authToken = req.headers["app-token"] as string;
     const userCode = req.query["user_code"] as string;
     const { todoItemId } = req.params;
+    console.log(`todo id ${todoItemId}`);
+    
 
     return this.todoService.findById(authToken, userCode, todoItemId);
   }

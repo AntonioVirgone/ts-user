@@ -70,7 +70,7 @@ app.get("/todo", async (req: Request, res: Response, next: NextFunction) => {
 
 // Find sinle item Todo
 app.get(
-  "/todo/:todoId",
+  "/todo/:todoItemId",
   async (req: Request, res: Response, next: NextFunction) => {
     await todoController
       .findById(req, res, next)

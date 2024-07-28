@@ -7,6 +7,7 @@ import { IVerifyTokenRepository } from "../../repository/verifyToken/IVerifyToke
 import { VerifyTokenRepository } from "../../repository/verifyToken/VerifyTokenRepository";
 import { ITodoService } from "./ITodoService";
 import { stat } from "node:fs";
+import { error } from "node:console";
 
 export class TodoService implements ITodoService {
   verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
@@ -28,8 +29,20 @@ export class TodoService implements ITodoService {
     userCode: string,
     todoId: string
   ): Promise<TodoModel> {
-    // TODO:
-    throw new Error("Method not implemented.");
+    return await this.verifyTokenRepository
+      .verify(authToken, userCode)
+      .then(async () => {
+        return await this.todoRepository
+          .findById(userCode, todoId)
+          .catch((error) => {
+            console.error(`${error}`);
+            throw new Error("Todo item not found");
+          });
+      })
+      .catch((error) => {
+        console.error(`${error}`);
+        throw new Error(`${error}`);
+      });
   }
 
   async create(
