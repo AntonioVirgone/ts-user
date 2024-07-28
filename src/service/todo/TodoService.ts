@@ -25,6 +25,7 @@ export class TodoService implements ITodoService {
     userCode: string,
     todoId: string
   ): Promise<TodoModel> {
+    // TODO:
     throw new Error("Method not implemented.");
   }
 
@@ -67,5 +68,14 @@ export class TodoService implements ITodoService {
       .catch((error) => {
         throw new Error(`${error}`);
       });
+  }
+
+  async changeStatus(
+    authToken: string,
+    userCode: string,
+    todoId: string,
+    status: string
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 }

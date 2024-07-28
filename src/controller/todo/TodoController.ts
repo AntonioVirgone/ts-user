@@ -73,6 +73,11 @@ export class TodoController implements ITodoController {
     const userCode: string = req.query["user_code"] as string;
     const { todoItemId, status } = req.params;
 
-    
+    await this.todoService.changeStatus(
+      authToken,
+      userCode,
+      todoItemId,
+      status
+    );
   }
 }
