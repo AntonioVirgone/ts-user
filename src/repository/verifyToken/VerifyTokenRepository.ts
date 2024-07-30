@@ -2,10 +2,12 @@ import axios, { AxiosRequestConfig } from "axios";
 import { IVerifyTokenRepository } from "./IVerifyTokenRepository";
 import { TS_AUTH_BASE_PATH } from "../../config/Config";
 import { TS_AUTH_TOKEN } from "../../config/Secrets";
-import { error } from "node:console";
 
 export class VerifyTokenRepository implements IVerifyTokenRepository {
   async verify(authToken: string, userCode: string): Promise<void> {
+    console.log(authToken + " " + userCode);
+    
+
     const config: AxiosRequestConfig = {
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +26,7 @@ export class VerifyTokenRepository implements IVerifyTokenRepository {
       )
       .then(() => console.log("Token is valid"))
       .catch((error) => {
-        console.log("Token expired");
+        console.log("Token expired ");
         throw new Error("Token expired");
       });
   }

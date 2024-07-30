@@ -9,6 +9,8 @@ export class LoginService implements ILoginService {
   loginRepository: ILoginRepository = new LoginRepository();
 
   async login(user: UserModel): Promise<TokenModel> {
+    console.log(user);
+    
     if (isUserValid(user)) {
       const userEntity = await this.loginRepository.findUser(user);
       return this.loginRepository.generateToken(userEntity);

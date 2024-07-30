@@ -15,6 +15,8 @@ export class LoginController implements ILoginController {
     res: Response,
     next: NextFunction
   ): Promise<TokenModel> {
+    console.log(req.body);
+    
     const user: UserModel = req.body;
     return await this.loginService.login(user);
   }

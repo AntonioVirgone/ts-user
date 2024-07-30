@@ -11,7 +11,7 @@ export interface ITodoService {
     authToken: string,
     userCode: string,
     todoModel: TodoModel
-  ): Promise<void>;
+  ): Promise<TodoModel>;
   delete(authToken: string, userCode: string): Promise<void>;
   deleteById(
     authToken: string,

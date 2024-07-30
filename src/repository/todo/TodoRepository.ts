@@ -54,13 +54,14 @@ export class TodoRepository implements ITodoRepository {
     }
   }
 
-  async create(userCode: string, todoModel: TodoModel): Promise<void> {
+  async create(userCode: string, todoModel: TodoModel): Promise<TodoModel> {
     try {
       await axios.post(
         `${TS_TODO_BASE_PATH}/user/${userCode}`,
         todoModel,
         this.config
       );
+      return todoModel
     } catch (error) {
       throw new Error(`${error}`);
     }

@@ -5,6 +5,17 @@ import { Auth } from "../../decorator/Auth";
 import { TodoService } from "../../service/todo/TodoService";
 import { ITodoService } from "../../service/todo/ITodoService";
 
+interface Item extends TodoModel {
+  id: number;
+  name: string;
+}
+
+let items: Item[] = [
+  { id: 1, name: 'Item 1', itemId: "1", title: "", status: "", description: "", createdAt: new Date() },
+  { id: 2, name: 'Item 1', itemId: "1", title: "", status: "", description: "", createdAt: new Date() },
+  { id: 3, name: 'Item 1', itemId: "1", title: "", status: "", description: "", createdAt: new Date() },
+];
+
 export class TodoController implements ITodoController {
   todoService: ITodoService = new TodoService();
 
@@ -31,12 +42,11 @@ export class TodoController implements ITodoController {
     const { todoItemId } = req.params;
     console.log(`todo id ${todoItemId}`);
     
-
     return this.todoService.findById(authToken, userCode, todoItemId);
   }
 
   @Auth
-  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async create(req: Request, res: Response, next: NextFunction): Promise<TodoModel> {
     const authToken: string = req.headers["app-token"] as string;
     const userCode: string = req.query["user_code"] as string;
     const todoModel: TodoModel = req.body;

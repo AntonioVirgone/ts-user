@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express, { NextFunction, Request, Response } from "express";
 import { LoginController } from "./controller/login/LoginController";
 import { TodoController } from "./controller/todo/TodoController";
@@ -10,6 +11,7 @@ import { RegisterController } from "./controller/register/RegisterController";
 const app = express();
 const port = 3030;
 
+app.use(cors());
 app.use(express.json());
 
 // Controller
@@ -53,6 +55,11 @@ app.post("/todo", async (req: Request, res: Response, next: NextFunction) => {
     .catch((error) =>
       res.status(400).json({ status: 400, message: `${error}` })
     );
+});
+
+app.post("/todo", async (req: Request, res: Response, next: NextFunction) => {
+  const result = todoController.create(req, res, next)
+  res.send(result);
 });
 
 // Get Todo list

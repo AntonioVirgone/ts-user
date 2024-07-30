@@ -1,4 +1,3 @@
-import { todo } from "node:test";
 import { TodoModel } from "../../model/TodoModel";
 import { TodoStatus } from "../../model/TodoStatus";
 import { ITodoRepository } from "../../repository/todo/ITodoRepository";
@@ -6,8 +5,6 @@ import { TodoRepository } from "../../repository/todo/TodoRepository";
 import { IVerifyTokenRepository } from "../../repository/verifyToken/IVerifyTokenRepository";
 import { VerifyTokenRepository } from "../../repository/verifyToken/VerifyTokenRepository";
 import { ITodoService } from "./ITodoService";
-import { stat } from "node:fs";
-import { error } from "node:console";
 
 export class TodoService implements ITodoService {
   verifyTokenRepository: IVerifyTokenRepository = new VerifyTokenRepository();
@@ -49,7 +46,9 @@ export class TodoService implements ITodoService {
     authToken: string,
     userCode: string,
     todoModel: TodoModel
-  ): Promise<void> {
+  ): Promise<TodoModel> {
+    console.log(authToken);
+    
     return await this.verifyTokenRepository
       .verify(authToken, userCode)
       .then(() => {
